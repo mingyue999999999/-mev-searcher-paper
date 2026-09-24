@@ -1,0 +1,31 @@
+{
+  "version": 3,
+  "created_at_utc": "2026-09-19T16:37:42+00:00",
+  "initial_capital_usd": 10000.0,
+  "equity_usd": 10000.0,
+  "peak_equity_usd": 10000.0,
+  "realized_pnl_usd": 0.0,
+  "return_percent": 0.0,
+  "max_drawdown_percent": 0.0,
+  "quoted_net_profit_total_usd": 0.0,
+  "expected_value_total_usd": 0.0,
+  "execution_buffer_total_usd": 0.0,
+  "latency_loss_total_usd": 0.0,
+  "tail_buffer_total_usd": 0.0,
+  "failed_execution_cost_total_usd": 0.0,
+  "successful_executions": 0,
+  "failed_executions": 0,
+  "paper_trades": [],
+  "processed_keys": [],
+  "chain_pnl_usd": {
+    "BSC": 0.0,
+    "Ethereum": 0.0,
+    "Solana": 0.0
+  },
+  "last_updated_utc": "2026-09-24T21:01:22+00:00",
+  "notes": [
+    "MODELED PAPER PNL ONLY",
+    "No wallet, private key, signing, or transaction submission",
+    "Scanner net profit is haircut by an extra execution buffer before booking"
+  ]
+}
