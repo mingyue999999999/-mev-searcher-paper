@@ -1,0 +1,43 @@
+name: MEV可靠性看门狗
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/mev-reliability-watchdog.yml"
+      - ".github/scripts/mev_reliability_watchdog.py"
+  schedule:
+    - cron: "22,52 * * * *"
+      timezone: "Etc/UTC"
+  workflow_run:
+    workflows:
+      - "夹子机器人模拟交易"
+    types: [completed]
+
+permissions:
+  actions: write
+  contents: read
+
+concurrency:
+  group: mev-reliability-watchdog
+  cancel-in-progress: false
+
+jobs:
+  watchdog:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          ref: main
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: 检查、恢复并验证MEV
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python ".github/scripts/mev_reliability_watchdog.py"
