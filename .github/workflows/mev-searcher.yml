@@ -1,16 +1,6 @@
 name: 夹子机器人模拟交易
 on:
   workflow_dispatch:
-  pull_request:
-    paths:
-      - ".github/workflows/mev-searcher.yml"
-      - ".github/heartbeat/mev.txt"
-      - "夹子/chains/**"
-      - "夹子/config/**"
-      - "夹子/engine/**"
-      - "夹子/内部测试/**"
-      - "夹子/main.py"
-      - "夹子/requirements.txt"
   push:
     branches:
       - main
