@@ -10,6 +10,10 @@ on:
   schedule:
     - cron: "22,52 * * * *"
       timezone: "Etc/UTC"
+  workflow_run:
+    workflows:
+      - "夹子机器人模拟交易"
+    types: [completed]
 
 permissions:
   actions: write
