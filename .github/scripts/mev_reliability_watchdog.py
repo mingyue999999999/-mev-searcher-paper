@@ -1,6 +1,7 @@
 import json
 import os
 import time
+import urllib.error
 import urllib.request
 from datetime import datetime, timezone
 
@@ -13,20 +14,32 @@ repo = os.environ["GITHUB_REPOSITORY"]
 
 def api_request(url, method="GET", payload=None):
     data = None if payload is None else json.dumps(payload).encode("utf-8")
-    req = urllib.request.Request(
-        url,
-        data=data,
-        method=method,
-        headers={
-            "Authorization": f"Bearer {token}",
-            "Accept": "application/vnd.github+json",
-            "X-GitHub-Api-Version": "2022-11-28",
-            "Content-Type": "application/json",
-        },
-    )
-    with urllib.request.urlopen(req, timeout=30) as resp:
-        raw = resp.read()
-        return json.loads(raw) if raw else None
+    retryable_statuses = {429, 502, 503, 504}
+
+    for attempt in range(4):
+        req = urllib.request.Request(
+            url,
+            data=data,
+            method=method,
+            headers={
+                "Authorization": f"Bearer {token}",
+                "Accept": "application/vnd.github+json",
+                "X-GitHub-Api-Version": "2022-11-28",
+                "Content-Type": "application/json",
+            },
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                raw = resp.read()
+                return json.loads(raw) if raw else None
+        except urllib.error.HTTPError as exc:
+            if exc.code not in retryable_statuses or attempt == 3:
+                raise
+        except (urllib.error.URLError, TimeoutError):
+            if attempt == 3:
+                raise
+
+        time.sleep(2 ** attempt)
 
 def runs():
     url = f"https://api.github.com/repos/{repo}/actions/workflows/mev-searcher.yml/runs?per_page=20"
