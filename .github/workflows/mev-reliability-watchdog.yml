@@ -8,7 +8,7 @@ on:
       - ".github/workflows/mev-reliability-watchdog.yml"
       - ".github/scripts/mev_reliability_watchdog.py"
   schedule:
-    - cron: "22,52 * * * *"
+    - cron: "7,22,37,52 * * * *"
       timezone: "Etc/UTC"
   workflow_run:
     workflows:
